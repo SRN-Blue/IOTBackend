@@ -12,11 +12,7 @@ app.get("/", (req, res) => res.send("Hello World!"));
 
 const server = app.listen(8000);
 const socket = io("http://127.0.0.1:8080");
-socket.emit("message", {data1: 'test1 Data', data2: 'Test2 Data'});
+socket.emit("message", { data1: "test1 Data", data2: "Test2 Data" });
 socket.on("message", (msg) => {
-    console.log(msg);
-  });
-// const io = require("socket.io")(server);
-// io.on("connection", (socket) => {
-//   console.log("Client Connected!");
-// });
+  console.log(msg);
+});
