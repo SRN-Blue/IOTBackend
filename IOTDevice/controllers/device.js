@@ -1,9 +1,11 @@
 const io = require("../socket");
 
 exports.turnOnDevice = (req, res, next) => {
-  res.status(200).send("Device is Turned On!")
   const socket = io.getIo();
-  const TimeInterval = setInterval((arg) => {
+
+  res.status(200).send("Device is Turned On!");
+
+  const TimeInterval = setInterval(() => {
     let date = new Date();
     let stringDate = date.toString();
     deviceId = "1DB41234"; // static ID for now(would be dynamic later)
