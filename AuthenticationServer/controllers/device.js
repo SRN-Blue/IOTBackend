@@ -1,11 +1,16 @@
-exports.getPost = (req, res, next) => {
-  let date = new Date();
-  let stringDate = date.toString();
-  deviceId = "1DB41234"; // static ID for now(would be dynamic later)
-  sensorLiveData = Math.random() * 101; // Generating fake number as sensor output(0 - 100)
-  res.status(200).json({
-    posts: [
-      { deviceId: deviceId, sensorLiveData: sensorLiveData, date: stringDate },
-    ],
-  });
+const Device = require("../models/device");
+
+exports.postAddDevice = (req, res, next) => {
+  const location = req.body.location;
+  const sensorType = req.body.sensortype;
+  console.log(location);
+  console.log(sensorType);
+  Device.create({ location: location, sensortype: sensorType })
+    .then((result) => {
+      console.log(result);
+      res.send(result);
+    })
+    .catch((err) => {
+      console.log(err);
+    });
 };

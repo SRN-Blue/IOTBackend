@@ -7,6 +7,8 @@ const deviceModel = require("./models/device");
 
 const app = express();
 
+app.use(express.json());
+
 console.log("This is Authentication Server! \n \n \n");
 
 app.use("/device", deviceRoutes);
