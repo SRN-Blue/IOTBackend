@@ -4,7 +4,7 @@ let socket;
 
 module.exports = {
   init: (httpServer) => {
-    socket = io(httpServer);
+    socket = io(httpServer, {auth: {token: "bbccdd"}});
     return socket;
   },
   getIo: () => {

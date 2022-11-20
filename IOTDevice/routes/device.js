@@ -4,7 +4,8 @@ const deviceController = require("../controllers/device");
 
 const router = express.Router();
 
-// GET /feed/posts
-router.get("/livedata", deviceController.turnOnDevice);
+// GET /device/posts
+router.post("/livedata", deviceController.turnOnDevice);
+router.post("/testdatalogin", deviceController.testPost);
 
 module.exports = router;

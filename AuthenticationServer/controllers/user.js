@@ -1,4 +1,5 @@
 const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
 
 const User = require("../models/user");
 
@@ -23,6 +24,7 @@ exports.postSignup = (req, res, next) => {
     });
 };
 
+// login with Session
 exports.postLogin = (req, res, next) => {
   const email = req.body.email;
   const password = req.body.password;
@@ -55,6 +57,51 @@ exports.postLogin = (req, res, next) => {
     });
 };
 exports.getSignup = (req, res, next) => {
-  console.log(req.session);
-  console.log(req.session.isLoggedIn);
+  const token = req.headers.authorization.split(' ')[1]; 
+    //Authorization: 'Bearer TOKEN'
+    if(!token)
+    {
+        res.status(200).json({success:false, message: "Error!Token was not provided."});
+    }
+    //Decoding the token
+    const decodedToken = jwt.verify(token,"This is My secret key for JWT Token" );
+    res.status(200).json({success:true, isdecoded: true, data:{email:decodedToken.email}});
+};
+
+// Login with JWT
+exports.postLoginToken = (req, res, next) => {
+  const email = req.body.email;
+  const password = req.body.password;
+
+  User.findAll({ where: { email: email } })
+    .then((users) => {
+      const user = users[0];
+      if (users.length == 0) {
+        return res.send("User Not Found!");
+      }
+      bcrypt
+        .compare(password, user.password)
+        .then((match) => {
+          let token;
+          if (match) {
+            token = jwt.sign(
+              { email: email, password: password },
+              "This is My secret key for JWT Token",
+              { expiresIn: "1h" }
+            );
+            // sending token back
+            res.status(200).json({
+              success: true,
+              data: { email: email, token: token },
+            });
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+          res.send("Something Went wrong, Try again!");
+        });
+    })
+    .catch((err) => {
+      console.log(err);
+    });
 };

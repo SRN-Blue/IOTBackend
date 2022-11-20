@@ -17,3 +17,20 @@ exports.turnOnDevice = (req, res, next) => {
     });
   }, 2000);
 };
+
+exports.testPost = async (req, res, next) => {
+  const got = await import("got");
+  const email = req.body.email;
+  const password = req.body.password;
+
+  const { data } = await got
+    .post("http://127.0.0.1:8000/user/login", {
+      json: {
+        email: "james@gmail.com",
+        password: "This is password",
+      },
+    })
+    .json();
+  console.log(data);
+  res.send(data);
+};
