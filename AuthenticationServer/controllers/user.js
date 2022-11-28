@@ -56,16 +56,29 @@ exports.postLogin = (req, res, next) => {
       console.log(err);
     });
 };
-exports.getSignup = (req, res, next) => {
-  const token = req.headers.authorization.split(' ')[1]; 
-    //Authorization: 'Bearer TOKEN'
-    if(!token)
-    {
-        res.status(200).json({success:false, message: "Error!Token was not provided."});
-    }
+exports.getAuthenticateDeviceToken = (req, res, next) => {
+  const token = req.headers.authorization.split(" ")[1];
+  //Authorization: 'Bearer TOKEN'
+  if (!token) {
+    res
+      .status(200)
+      .json({ success: false, message: "Error!Token was not provided." });
+  }
+
+  let decodedToke;
+  try {
     //Decoding the token
-    const decodedToken = jwt.verify(token,"This is My secret key for JWT Token" );
-    res.status(200).json({success:true, isdecoded: true, data:{email:decodedToken.email}});
+    decodedToken = jwt.verify(token, "This is My secret key for JWT Token");
+  } catch (error) {
+    res.status(200).json({ success: false, error: error });
+  }
+
+  // res.status(200).json({success:true, isdecoded: true, data:{email:decodedToken.email}});
+  if (decodedToken.email) {
+    res.status(200).json({ success: true, error: "None" });
+  }else{
+    res.status(200).json({ success: false, error: "couldnt find the user!" });
+  }
 };
 
 // Login with JWT

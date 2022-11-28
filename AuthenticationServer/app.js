@@ -25,7 +25,6 @@ console.log("This is Authentication Server! \n \n \n");
 
 app.use("/device", deviceRoutes);
 app.use("/user", userRoutes);
-app.get("/", (req, res) => res.send("Hello World!"));
 
 Gateway.hasMany(Device);
 Gateway.belongsTo(Area, {

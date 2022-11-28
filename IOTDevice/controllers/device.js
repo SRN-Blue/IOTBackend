@@ -18,20 +18,45 @@ exports.turnOnDevice = (req, res, next) => {
     });
   }, 2000);
 };
+exports.addDevice = async (req, res, next) => {
+  const got = await import("got");
+
+  const location = req.body.location;
+  const sensortype = req.body.sensortype;
+  let jwtToken = req.body.token;
+  jwtToken = "Bearer" + " " + jwtToken.toString();
+  console.log(jwtToken);
+
+  const { data } = await got.got
+    .post("http://127.0.0.1:8000/device/add", {
+      json: {
+        location: location,
+        sensortype: sensortype,
+      },
+      // responseType: "json",
+      headers: {
+        Authorization: jwtToken,
+      },
+    })
+    .json();
+  console.log(data);
+  res.send(data);
+};
 
 exports.testPost = async (req, res, next) => {
-  const got = await import('got');
+  const got = await import("got");
 
   const email = req.body.email;
   const password = req.body.password;
 
-  const { data } = await got.got.post("http://127.0.0.1:8000/user/login", {
-    json: {
-      email: "james@gmail.com",
-      password: "This is password",
-    },
-  })
-  .json();
+  const { data } = await got.got
+    .post("http://127.0.0.1:8000/user/login", {
+      json: {
+        email: email,
+        password: password,
+      },
+    })
+    .json();
   console.log(data);
   res.send(data);
 };
