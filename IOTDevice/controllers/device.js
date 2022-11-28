@@ -23,9 +23,8 @@ exports.addDevice = async (req, res, next) => {
 
   const location = req.body.location;
   const sensortype = req.body.sensortype;
-  let jwtToken = req.body.token;
+  let jwtToken = req.headers.authorization.split(" ")[1];
   jwtToken = "Bearer" + " " + jwtToken.toString();
-  console.log(jwtToken);
 
   const { data } = await got.got
     .post("http://127.0.0.1:8000/device/add", {
@@ -33,7 +32,7 @@ exports.addDevice = async (req, res, next) => {
         location: location,
         sensortype: sensortype,
       },
-      // responseType: "json",
+      responseType: "json",
       headers: {
         Authorization: jwtToken,
       },
