@@ -4,13 +4,16 @@ const deviceController = require("../controllers/device");
 
 const router = express.Router();
 
-// GET /device/add-device
+// POST /device/add-device
 // Adding new device to database
 router.post("/add-device", deviceController.addDevice);
 
-// GET /device/livedata
+// POST /device/livedata
 // start sending Devices data over the socket
-router.post("/livedata", deviceController.turnOnDevice);
-router.post("/testdatalogin", deviceController.testPost);
+router.get("/livedata", deviceController.turnOnDevice);
+
+// POST /device/login
+// to get the token
+router.post("/login", deviceController.postLogin);
 
 module.exports = router;

@@ -1,15 +1,33 @@
 const io = require("../socket");
 // const got = await import('got');
 
-exports.turnOnDevice = (req, res, next) => {
+exports.turnOnDevice = async (req, res, next) => {
   const socket = io.getIo();
+  const got = await import("got");
+
+  let jwtToken = req.headers.authorization.split(" ")[1];
+  jwtToken = "Bearer" + " " + jwtToken.toString();
+
+  const { data } = await got.got
+    .get("http://127.0.0.1:8000/device/get-ids", {
+      responseType: "json",
+      headers: {
+        Authorization: jwtToken,
+      },
+    })
+    .json();
+  console.log(data);
+  const idslist = data.id;
+  const minId = idslist[0];
+  const maxId = idslist[idslist.length - 1];
 
   res.status(200).send("Device is Turned On!");
 
   const TimeInterval = setInterval(() => {
+    const randomId = Math.floor(Math.random() * (maxId - minId + 1)) + minId;
     let date = new Date();
     let stringDate = date.toString();
-    deviceId = "1DB41234"; // static ID for now(would be dynamic later)
+    deviceId = idslist[randomId];
     sensorLiveData = Math.random() * 101; // Generating fake number as sensor output(0 - 100)
     socket.emit("message", {
       deviceId: deviceId,
@@ -18,6 +36,8 @@ exports.turnOnDevice = (req, res, next) => {
     });
   }, 2000);
 };
+
+// Send POST request to Auth/Auth server to create a new device in SQL database
 exports.addDevice = async (req, res, next) => {
   const got = await import("got");
 
@@ -42,7 +62,8 @@ exports.addDevice = async (req, res, next) => {
   res.send(data);
 };
 
-exports.testPost = async (req, res, next) => {
+// Send Post requet to Auth/Auth server to get the token
+exports.postLogin = async (req, res, next) => {
   const got = await import("got");
 
   const email = req.body.email;

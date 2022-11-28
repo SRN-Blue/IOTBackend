@@ -3,6 +3,7 @@ const jwt = require("jsonwebtoken");
 
 const User = require("../models/user");
 
+// create a new User
 exports.postSignup = (req, res, next) => {
   const name = req.body.name;
   const email = req.body.email;
@@ -56,6 +57,8 @@ exports.postLogin = (req, res, next) => {
       console.log(err);
     });
 };
+
+// Validate the Token
 exports.getAuthenticateDeviceToken = (req, res, next) => {
   const token = req.headers.authorization.split(" ")[1];
   //Authorization: 'Bearer TOKEN'
@@ -81,7 +84,7 @@ exports.getAuthenticateDeviceToken = (req, res, next) => {
   }
 };
 
-// Login with JWT
+// Login with JWT(Generate new Token)
 exports.postLoginToken = (req, res, next) => {
   const email = req.body.email;
   const password = req.body.password;

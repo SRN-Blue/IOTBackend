@@ -23,6 +23,6 @@ io.on("connection", (socket) => {
   io.emit("You are Connected!!!");
   socket.on("message", (msg) => {
     console.log(msg);
-    io.emit("message", msg);
+    // io.emit("message", msg);
   });
 });

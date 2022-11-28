@@ -9,4 +9,8 @@ const router = express.Router();
 // To create a new device in the database
 router.post("/add", isAuth, deviceController.postAddDevice);
 
+// GET /device/get-ids
+// To all the ids of devices
+router.get("/get-ids", isAuth, deviceController.getDeviceIds);
+
 module.exports = router;
