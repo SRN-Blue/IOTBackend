@@ -13,12 +13,15 @@
     "bcryptjs": "^2.4.3",
     "express": "^4.18.2",
     "express-session": "^1.17.3",
+    "jsonwebtoken": "^8.5.1",
     "mysql2": "^2.3.3",
     "sequelize": "^6.25.6",
     "socket.io": "^4.5.3"
   },
   "devDependencies": {
     "chai": "^4.3.7",
+    "chai-http": "^4.3.0",
+    "chai-json": "^1.0.0",
     "mocha": "^10.1.0",
     "nodemon": "^2.0.20"
   }

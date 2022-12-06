@@ -5,7 +5,10 @@ module.exports = (req, res, next) => {
   const token = req.headers.authorization.split(" ")[1];
   //Authorization: 'Bearer TOKEN'
   if (!token) {
-    return res.status(200).json({
+    const error = new Error("Not Authenticated!");
+    error.statusCode = 401;
+    throw error;
+    return res.status(401).json({
       success: false,
       data: { message: "Error!Token was not provided." },
     });
