@@ -4,7 +4,7 @@
   "description": "",
   "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "mocha",
     "start": "nodemon app.js"
   },
   "author": "Soren",
@@ -18,6 +18,8 @@
     "socket.io": "^4.5.3"
   },
   "devDependencies": {
+    "chai": "^4.3.7",
+    "mocha": "^10.1.0",
     "nodemon": "^2.0.20"
   }
 }
