@@ -20,6 +20,20 @@ describe("SQL Database", () => {
   });
   beforeEach((done) => setTimeout(done, 500));
 
+  it("should throw an error if User datas are not valid!", (done) => {
+    chai
+      .request("http://127.0.0.1:8000/")
+      .post("user/signup")
+      .send({ name: "james", password: "IE@1998" })
+      .end((err, res) => {
+        res.should.have.status(403);
+        res.body.should.be.a("object");
+        res.body.should.have.property("success");
+        res.body.should.have.property("success").eql(false);
+        done();
+      });
+  });
+
   it("should return success message if user is addedd successfully!", (done) => {
     chai
       .request("http://127.0.0.1:8000/")
@@ -46,20 +60,6 @@ describe("SQL Database", () => {
         res.body.should.be.a("object");
         res.body.should.have.property("message");
         res.body.should.have.property("message").eql("User already exists!");
-        done();
-      });
-  });
-
-  it("should throw an error if User datas are not valid!", (done) => {
-    chai
-      .request("http://127.0.0.1:8000/")
-      .post("user/signup")
-      .send({ name: "james", password: "IE@1998" })
-      .end((err, res) => {
-        res.should.have.status(403);
-        res.body.should.be.a("object");
-        res.body.should.have.property("success");
-        res.body.should.have.property("success").eql(false);
         done();
       });
   });

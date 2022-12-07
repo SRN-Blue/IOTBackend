@@ -1,13 +1,7 @@
 const express = require("express");
 const { io } = require("socket.io-client");
-// const sequelize = require("./util/database");
-if (process.env.NODE_ENV !== "test") {
-  sequelize = require("./util/database");
-  console.log("Main DB");
-} else {
-  console.log("Test DB");
-  sequelize = require("./util/test-database");
-}
+const sequelize = require("./util/database");
+
 const session = require("express-session");
 
 const deviceRoutes = require("./routes/device");

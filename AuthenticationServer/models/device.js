@@ -1,10 +1,5 @@
 const Sequelize = require("sequelize");
-
-if (process.env.NODE_ENV !== "test") {
-  sequelize = require("../util/database");
-} else {
-  sequelize = require("../util/test-database");
-}
+sequelize = require("../util/database");
 
 const Device = sequelize.define("device", {
   id: {
@@ -20,7 +15,7 @@ const Device = sequelize.define("device", {
   sensortype: {
     type: Sequelize.STRING,
     allowNull: false,
-  }
+  },
 });
 
 module.exports = Device;

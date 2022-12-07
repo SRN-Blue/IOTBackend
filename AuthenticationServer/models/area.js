@@ -1,10 +1,5 @@
 const Sequelize = require("sequelize");
-
-if (process.env.NODE_ENV !== "test") {
-  sequelize = require("../util/database");
-} else {
-  sequelize = require("../util/test-database");
-}
+sequelize = require("../util/database");
 
 const Area = sequelize.define("area", {
   id: {
