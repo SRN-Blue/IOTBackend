@@ -4,25 +4,29 @@ const jwt = require("jsonwebtoken");
 const User = require("../models/user");
 
 // create a new User
-exports.postSignup = (req, res, next) => {
+exports.postSignup = async (req, res, next) => {
   const name = req.body.name;
   const email = req.body.email;
   const password = req.body.password;
 
-  User.findAll({ where: { email: email } })
-    .then((users) => {
-      if (users.length > 0) {
-        return res.send("User already exists!");
-      }
-      return bcrypt.hash(password, 12).then((hashedPassword) => {
-        // returns a promise
-        User.create({ name: name, email: email, password: hashedPassword });
-        res.send("User Has Been Created Successfully");
-      });
-    })
-    .catch((err) => {
-      console.log(err);
-    });
+  const users = await User.findAll({ where: { email: email } }).catch((err) => {
+    console.log(err);
+    return res.status(403).json({ success: false, message: err });
+  });
+
+  if (users.length > 0) {
+    return res
+      .status(200)
+      .json({ success: true, message: "User already exists!" });
+  }
+
+  const hashedPassword = await bcrypt.hash(password, 12);
+  // returns a promise
+  User.create({ name: name, email: email, password: hashedPassword });
+  res.status(200).json({
+    success: false,
+    message: "User Has Been Created Successfully",
+  });
 };
 
 // login with Session
@@ -68,7 +72,7 @@ exports.getAuthenticateDeviceToken = (req, res, next) => {
       .json({ success: false, message: "Error!Token was not provided." });
   }
 
-  let decodedToken = '';
+  let decodedToken = "";
   try {
     //Decoding the token
     decodedToken = jwt.verify(token, "This is My secret key for JWT Token");
@@ -80,7 +84,9 @@ exports.getAuthenticateDeviceToken = (req, res, next) => {
   if (decodedToken.email) {
     res.status(200).json({ success: true, message: "None" });
   } else {
-    return res.status(401).json({ success: false, message: "couldnt find the user!" });
+    return res
+      .status(401)
+      .json({ success: false, message: "couldnt find the user!" });
   }
 };
 

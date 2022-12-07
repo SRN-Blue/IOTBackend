@@ -1,6 +1,11 @@
 const Sequelize = require("sequelize");
+let sequelize;
 
-const sequelize = require("../util/database");
+if (process.env.NODE_ENV !== "test") {
+  sequelize = require("../util/database");
+} else {
+  sequelize = require("../util/test-database");
+}
 
 const User = sequelize.define("user", {
   id: {

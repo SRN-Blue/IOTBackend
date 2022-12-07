@@ -1,3 +1,7 @@
+process.env.NODE_ENV = 'test';
+
+let app = require("../app");
+
 const jwt = require("jsonwebtoken");
 let chai = require("chai");
 let chaiHttp = require("chai-http");
@@ -6,6 +10,8 @@ let should = chai.should();
 chai.use(chaiHttp);
 
 describe("JWT Authentication", () => {
+  beforeEach((done) => setTimeout(done, 500));
+
   it("should throw an error if the bearer Token is not Provided!", (done) => {
     const token = "";
     chai

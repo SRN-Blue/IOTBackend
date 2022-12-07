@@ -1,6 +1,10 @@
 const Sequelize = require("sequelize");
 
-const sequelize = require("../util/database");
+if (process.env.NODE_ENV !== "test") {
+  sequelize = require("../util/database");
+} else {
+  sequelize = require("../util/test-database");
+}
 
 const Device = sequelize.define("device", {
   id: {
