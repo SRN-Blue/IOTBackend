@@ -10,7 +10,7 @@ const router = express.Router();
 router.post("/add", isAuth, deviceController.postAddDevice);
 
 // GET /device/get-ids
-// To all the ids of devices
+// To get all the ids of devices
 router.get("/get-ids", isAuth, deviceController.getDeviceIds);
 
 module.exports = router;

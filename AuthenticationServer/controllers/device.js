@@ -17,7 +17,6 @@ exports.postAddDevice = async (req, res, next) => {
     return err;
   });
 
-  console.log(result);
   res.status(200).json({
     success: true,
     data: {
@@ -34,7 +33,6 @@ exports.getDeviceIds = async (req, res, next) => {
     return err;
   });
 
-  console.log(devices);
   // extract the ids from devices object
   const arrayOfIds = devices.map((device) => {
     return device.dataValues.id;

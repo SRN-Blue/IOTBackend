@@ -7,7 +7,6 @@ module.exports = (req, res, next) => {
   if (!token) {
     const error = new Error("Not Authenticated!");
     error.statusCode = 401;
-    throw error;
     return res.status(401).json({
       success: false,
       data: { message: "Error!Token was not provided." },
@@ -19,7 +18,7 @@ module.exports = (req, res, next) => {
     //Decoding the token
     decodedToken = jwt.verify(token, "This is My secret key for JWT Token");
   } catch (error) {
-    res.status(200).json({
+    res.status(401).json({
       success: false,
       data: { error: error },
     });
@@ -27,7 +26,7 @@ module.exports = (req, res, next) => {
 
   if (!decodedToken.email) {
     return res
-      .status(200)
+      .status(401)
       .json({ success: false, data: { error: "Invalid Token!" } });
   }
 

@@ -10,7 +10,6 @@ exports.postSignup = async (req, res, next) => {
   const password = req.body.password;
 
   const users = await User.findAll({ where: { email: email } }).catch((err) => {
-    console.log(err);
     return res.status(403).json({ success: false, message: err });
   });
 
@@ -29,7 +28,7 @@ exports.postSignup = async (req, res, next) => {
   });
 };
 
-// login with Session
+// login with Session // there is no route to this controler
 exports.postLogin = (req, res, next) => {
   const email = req.body.email;
   const password = req.body.password;
@@ -91,39 +90,39 @@ exports.getAuthenticateDeviceToken = (req, res, next) => {
 };
 
 // Login with JWT(Generate new Token)
-exports.postLoginToken = (req, res, next) => {
+exports.postLoginToken = async (req, res, next) => {
   const email = req.body.email;
   const password = req.body.password;
 
-  User.findAll({ where: { email: email } })
-    .then((users) => {
-      const user = users[0];
-      if (users.length == 0) {
-        return res.send("User Not Found!");
-      }
-      bcrypt
-        .compare(password, user.password)
-        .then((match) => {
-          let token;
-          if (match) {
-            token = jwt.sign(
-              { email: email, password: password },
-              "This is My secret key for JWT Token",
-              { expiresIn: "1h" }
-            );
-            // sending token back
-            res.status(200).json({
-              success: true,
-              data: { email: email, token: token },
-            });
-          }
-        })
-        .catch((err) => {
-          console.log(err);
-          res.send("Something Went wrong, Try again!");
-        });
-    })
-    .catch((err) => {
-      console.log(err);
+  const users = await User.findAll({ where: { email: email } }).catch((err) => {
+    return res.status(404).json({ success: false, message: err });
+  });
+
+  const user = users[0];
+  if (users.length == 0) {
+    return res.status(404).json({ success: false, message: "User Not Found!" });
+  }
+
+  const match = await bcrypt.compare(password, user.password).catch((err) => {
+    res.status(401).json({
+      success: false,
+      message: err,
     });
+  });
+
+  let token;
+  if (match) {
+    token = jwt.sign(
+      { email: email, password: password },
+      "This is My secret key for JWT Token",
+      { expiresIn: "1h" }
+    );
+    // sending token back
+    res.status(200).json({
+      success: true,
+      data: { email: email, token: token },
+      // email: email,
+      // token: token,
+    });
+  }
 };

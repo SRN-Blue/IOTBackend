@@ -1,4 +1,4 @@
-process.env.NODE_ENV = 'test';
+process.env.NODE_ENV = "test";
 
 let app = require("../app");
 
@@ -65,6 +65,41 @@ describe("JWT Authentication", () => {
         res.body.should.have.property("message");
         res.body.should.have.property("message").eql("None");
         res.body.should.have.property("success").eql(true);
+        done();
+      });
+  });
+
+  it("should return error if no email has been found on DataBase!", (done) => {
+    chai
+      .request("http://127.0.0.1:8000/")
+      .post("user/login")
+      .send({
+        name: "james",
+        email: "jamesWrongEmail@gmail.com",
+        password: "IE@1998",
+      })
+      .end((err, res) => {
+        res.should.have.status(404);
+        res.body.should.be.a("object");
+        res.body.should.have.property("message");
+        res.body.should.have.property("message").eql("User Not Found!");
+        done();
+      });
+  });
+
+  it("should return Email and JWT Token with right credentials!", (done) => {
+    chai
+      .request("http://127.0.0.1:8000/")
+      .post("user/login")
+      .send({
+        name: "james",
+        email: "james@gmail.com",
+        password: "IE@1998",
+      })
+      .end((err, res) => {
+        res.should.have.status(200);
+        res.body.should.be.a("object");
+        res.body.should.have.property("data");
         done();
       });
   });
