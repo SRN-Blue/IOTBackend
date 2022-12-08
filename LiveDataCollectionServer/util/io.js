@@ -1,3 +1,6 @@
+const sensorDataSaver = require("../controllers/ioController");
+
+// will be run after database connection and server initialization
 exports.TurnOnIo = (server) => {
   const io = require("../socket").init(server);
 
@@ -11,9 +14,8 @@ exports.TurnOnIo = (server) => {
     io.emit("You are Connected!!!");
     socket.on("message", (msg) => {
       console.log(msg);
+      sensorDataSaver.saveDataInDB(msg);
       io.emit("message", msg);
     });
   });
 };
-
-module.exports
