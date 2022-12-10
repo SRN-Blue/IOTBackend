@@ -8,20 +8,22 @@ exports.turnOnDevice = async (req, res, next) => {
   let jwtToken = req.headers.authorization.split(" ")[1];
   jwtToken = "Bearer" + " " + jwtToken.toString();
 
+  const authServerAddress = process.env.AUTH_SERVER_ADD;
   const { data } = await got.got
-    .get("http://127.0.0.1:8000/device/get-ids", {
+    // .get("http://127.0.0.1:8000/device/get-ids", {
+    .get(`http://${authServerAddress}:8000/device/get-ids`, {
       responseType: "json",
       headers: {
         Authorization: jwtToken,
       },
     })
     .json();
-  console.log(data);
+  console.log(`Here ${data}`);
   const idslist = data.id;
   const minId = idslist[0];
   const maxId = idslist[idslist.length - 1];
 
-  res.status(200).send("Device is Turned On!");
+  // res.status(200).send("Device is Turned On!");
 
   const TimeInterval = setInterval(() => {
     const randomId = Math.floor(Math.random() * (maxId - minId + 1)) + minId;
@@ -35,6 +37,7 @@ exports.turnOnDevice = async (req, res, next) => {
       date: stringDate,
     });
   }, 2000);
+  res.status(200).send("Device is Turned On!");
 };
 
 // Send POST request to Auth/Auth server to create a new device in SQL database
@@ -46,8 +49,9 @@ exports.addDevice = async (req, res, next) => {
   let jwtToken = req.headers.authorization.split(" ")[1];
   jwtToken = "Bearer" + " " + jwtToken.toString();
 
+  const authServerAddress = process.env.AUTH_SERVER_ADD;
   const { data } = await got.got
-    .post("http://127.0.0.1:8000/device/add", {
+    .post(`http://${authServerAddress}:8000/device/add`, {
       json: {
         location: location,
         sensortype: sensortype,
@@ -69,8 +73,9 @@ exports.postLogin = async (req, res, next) => {
   const email = req.body.email;
   const password = req.body.password;
 
+  const authServerAddress = process.env.AUTH_SERVER_ADD;
   const { data } = await got.got
-    .post("http://127.0.0.1:8000/user/login", {
+    .post(`http://${authServerAddress}:8000/user/login`, {
       json: {
         email: email,
         password: password,

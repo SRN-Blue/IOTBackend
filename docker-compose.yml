@@ -1,0 +1,86 @@
+version: "3.8"
+
+x-services-volume:
+    &services-volume
+    type: bind
+    source: ./AuthenticationServer
+    target: /AuthenticationServer
+
+services:
+
+    authentiction-server:
+        build:
+            context: ./AuthenticationServer
+        ports:
+            - "8000:8000"
+        volumes:
+            - *services-volume
+        restart: always
+        environment:
+            - PORT=8000
+            - DB_HOST=mysql-db
+            - DB_NAME=iotauthdb
+            - DB_USER=root
+            # - DB_PASS=supersecretpassword
+            - DB_PASS=MK!1998
+        depends_on:
+            - mysql-db
+
+    livedatacollection-server:
+        build:
+            context: ./LiveDataCollectionServer
+        ports:
+            - "8080:8080"
+        volumes:
+            - ./LiveDataCollectionServer:/LiveDataCollectionServer
+        restart: always
+        environment:
+            - PORT=8080
+            - DB_Schema=IOTschema
+            - DB_HOST=mongo-db
+            - DB_NAME=IOT-LiveDataCollection
+            - DB_USER=root
+            - DB_PASS=supersecretpassword
+            - DB_PORT=27017
+            - ME_CONFIG_MONGODB_URL=mongodb://root:password@mongo:27017/?authSource=admin
+            - AUTH_SERVER_ADD=authentiction-server
+        depends_on:
+            - mongo-db
+
+    iotgateway-server:
+        build:
+            context: ./IOTDevice
+        ports:
+            - "8081:8081"
+        volumes:
+            # - *services-volume
+            - ./IOTDevice:/IOTDevice
+        restart: always
+        environment:
+            - PORT=8081
+            - AUTH_SERVER_ADD=authentiction-server
+            - LIVEDATA_SERVER_ADD=livedatacollection-server
+        depends_on:
+            - livedatacollection-server
+
+    mysql-db:
+        image: mysql:8.0
+        restart: always
+        environment:
+            - MYSQL_DATABASE=iotauthdb
+            # - MYSQL_USER=dbadmin
+            # - MYSQL_PASSWORD=MK!1998
+            - MYSQL_ROOT_PASSWORD=MK!1998
+        # ports:
+        #     - '3307:3306'
+        # depends_on:
+        #     - mongo-db
+
+    mongo-db:
+        image: mongo
+        # restart: always
+        # environment:
+        # - MONGO_INITDB_ROOT_USERNAME=root
+        # - MONGO_INITDB_ROOT_PASSWORD=supersecretpassword
+        ports:
+            - "27017:27017"

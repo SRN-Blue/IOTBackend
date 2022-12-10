@@ -1,5 +1,4 @@
 const express = require("express");
-const { io } = require("socket.io-client");
 const sequelize = require("./util/database");
 
 const session = require("express-session");
@@ -34,11 +33,12 @@ Gateway.belongsTo(Area, {
   onDelete: "CASCADE",
 });
 
+const PORT = process.env.PORT || 8000;
 sequelize
   // .sync({ force: true })
   .sync()
   .then((result) => {
-    app.listen(8000);
+    app.listen(PORT);
   })
   .catch((err) => {
     console.log(err);

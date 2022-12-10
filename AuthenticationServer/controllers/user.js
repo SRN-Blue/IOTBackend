@@ -23,7 +23,7 @@ exports.postSignup = async (req, res, next) => {
   // returns a promise
   User.create({ name: name, email: email, password: hashedPassword });
   res.status(200).json({
-    success: false,
+    success: true,
     message: "User Has Been Created Successfully",
   });
 };
