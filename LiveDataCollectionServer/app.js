@@ -9,7 +9,6 @@ const app = express();
 console.log("This is Live Data Collection Server! \n \n \n");
 
 app.use("/device", deviceRoutes);
-app.get("/", (req, res) => res.send("Hello World!"));
 
 // const server = app.listen(8080);
 

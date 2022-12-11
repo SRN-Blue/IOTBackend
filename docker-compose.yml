@@ -78,9 +78,27 @@ services:
 
     mongo-db:
         image: mongo
-        # restart: always
+        restart: always
         # environment:
         # - MONGO_INITDB_ROOT_USERNAME=root
         # - MONGO_INITDB_ROOT_PASSWORD=supersecretpassword
         ports:
             - "27017:27017"
+
+    reverse-proxy:
+        image: nginx:1.23.2
+        restart: always
+        volumes:
+            - ./ReverseProxy/nginx.conf:/etc/nginx/nginx.conf
+        ports:
+            - 80:80
+        environment:
+            - AUTH_SERVER=authentiction-server
+            - LIVEDATACOLLECTION_SERVER=livedatacollection-server
+            - IOTGATEWAY_SERVER=iotgateway-server
+        depends_on:
+            - authentiction-server
+            - livedatacollection-server
+            - iotgateway-server
+            - mysql-db
+            - mongo-db
