@@ -1,5 +1,5 @@
-# **IOT Backend Infrastructure**  
-This is a Backend project which is designed to support all the required features to gather live data from sensors and IoT Gateways, authenticate them, and finally store them in a database. different parts have been built with a microservice mindset so the project is scaleable for enterprise usage and can be modified to fit the desired architecture.
+# **IoT Backend Infrastructure**  
+This is a Backend project which is designed to support all the required features to gather live data from sensors and IoT Gateways, authenticate them, and finally store them in a database. The project has been built with a microservice mindset, so it is scaleable for enterprise purposes and can be modified to fit the desired architecture.
   
 ## **Technologies Used in Project**  
 * **Node.js**
