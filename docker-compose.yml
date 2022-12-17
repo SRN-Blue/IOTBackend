@@ -22,7 +22,7 @@ services:
             - DB_NAME=iotauthdb
             - DB_USER=root
             # - DB_PASS=supersecretpassword
-            - DB_PASS=MK!1998
+            - DB_PASS=supersecretpassword
         depends_on:
             - mysql-db
 
@@ -69,8 +69,8 @@ services:
         environment:
             - MYSQL_DATABASE=iotauthdb
             # - MYSQL_USER=dbadmin
-            # - MYSQL_PASSWORD=MK!1998
-            - MYSQL_ROOT_PASSWORD=MK!1998
+            # - MYSQL_PASSWORD=supersecretpassword
+            - MYSQL_ROOT_PASSWORD=supersecretpassword
         # ports:
         #     - '3307:3306'
         # depends_on:
